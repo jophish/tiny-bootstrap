@@ -17,18 +17,18 @@
 
 	push 0000h
 	call movecursor
-	add esp, 2
+	add sp, 2
 
 	push msg
 	call print
-	add esp, 2
+	add sp, 2
 
 	cli
 	hlt
 
 clearscreen:
-	push ebp
-	mov ebp, esp
+	push bp
+	mov bp, sp
 	pusha
 
 	mov ah, 07h		; tells BIOS to scroll down window
@@ -37,33 +37,33 @@ clearscreen:
 	mov cx, 00h  		; specifies top left of screen as (0,0)
 	mov dh, 18h		; 18h = 24 rows of chars
 	mov dl, 4fh		; 4fh = 79 cols of chars
-	int 10h		; calls video interrupt
+	int 10h			; calls video interrupt
 
 	popa
-	mov esp, ebp
-	pop ebp
+	mov sp, bp
+	pop bp
 	ret
 
 movecursor:
-	push ebp
-	mov ebp, esp
+	push bp
+	mov bp, sp
 	pusha
 
-	mov dx, [ebp+6] 	; get the argument from the stack. |ebp| = 4, |arg| = 2
+	mov dx, [bp+4] 		; get the argument from the stack. |bp| = 2, |arg| = 2
 	mov ah, 02h 		; set cursor position
 	mov bh, 00h		; page 0 - doesn't matter, we're not using double-buffering
 	int 10h
 
 	popa
-	mov esp, ebp
-	pop ebp
+	mov sp, bp
+	pop bp
 	ret
 
 print:
-	push ebp
-	mov ebp, esp
+	push bp
+	mov bp, sp
 	pusha
-	mov si, [ebp+6]	 	; grab the pointer to the data
+	mov si, [bp+4]	 	; grab the pointer to the data
 	mov bh, 00h	        ; page number, 0 again
 	mov bl, 00h		; foreground color, irrelevant - in text mode
 	mov ah, 0Eh  		; print character to TTY
@@ -76,8 +76,8 @@ print:
 	jmp .char	  	; keep looping
  .return:
 	popa
-	mov esp, ebp
-	pop ebp
+	mov sp, bp
+	pop bp
 	ret
 
 
