@@ -1,3 +1,10 @@
+;; A tiny, working bootloader for x86 PCs. Has a few subroutines
+;; so it's slightly less useless than just printing "hello world".
+;;
+;; writeup here: http://joebergeron.io/posts/post_two.html
+;;
+;; Joe Bergeron, 2016.
+;;
 	bits 16
 
 	mov ax, 07C0h
